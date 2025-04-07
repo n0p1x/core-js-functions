@@ -183,28 +183,10 @@ function retry(func, attempts) {
  */
 function logger(func, logFunc) {
   return (...args) => {
-    const funcName = func.name || 'anonymous';
-
-    const argsString = args
-      .map((arg) => {
-        if (Array.isArray(arg)) {
-          return JSON.stringify(arg);
-        }
-        if (typeof arg === 'object' && arg !== null) {
-          return JSON.stringify(arg);
-        }
-        return String(arg);
-      })
-      .join(',');
-
-    const logMessage = `${funcName}(${argsString})`;
-
-    logFunc(`${logMessage} starts`);
-
+    const argsStr = args.map((arg) => JSON.stringify(arg)).join(',');
+    logFunc(`${func.name}(${argsStr}) starts`);
     const result = func.apply(this, args);
-
-    logFunc(`${logMessage} ends`);
-
+    logFunc(`${func.name}(${argsStr}) ends`);
     return result;
   };
 }
